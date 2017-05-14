@@ -11,12 +11,14 @@
 
 using namespace CppPromise;
 
-Promise<int> test()
+//Return an already resolved promise containing an int
+Promise<int> testReturnInt()
 {
     return resolve(123);
 }
 
-Promise<float> test2()
+//Return an already resolved promise containing a float
+Promise<float> testReturnFloat()
 {
     return resolve(1.23f);
 }
@@ -27,12 +29,12 @@ TEST_CASE("Basic Tests", "[Basic]")
     char **argv = NULL;
     QCoreApplication a(argc, argv);
 
-    test().then([](int iTest) {
+    testReturnInt().then([](int iTest) {
        REQUIRE(iTest == 123);
-       return test2();
+       return testReturnFloat();
     }).then([](float fTest) {
         REQUIRE(fTest == Approx(1.23));
-        test();
+        testReturnInt();
     }).then([]() {
         REQUIRE(true);
         return reject<void>((int)345);
